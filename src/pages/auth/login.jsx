@@ -8,7 +8,6 @@ import { ToastContainer } from "react-toastify";
 import LogoWhite from "@/assets/images/logo/logo-white.svg";
 import Logo from "@/assets/images/logo/logo.svg";
 import TLogo from "@/assets/images/logo/tumatar-logo.svg";
-import Illustration from "@/assets/images/auth/ils1.svg";
 
 const login = () => {
   const [isDark] = useDarkMode();
@@ -52,7 +51,7 @@ const login = () => {
                 <div className="text-center 2xl:mb-10 mb-4">
                   <h4 className="font-medium">Sign in</h4>
                   <div className="text-slate-500 text-base">
-                    Sign in to your account to start using Dashcode
+                    Sign in to your account to start using Tumatar
                   </div>
                 </div>
                 <LoginForm />

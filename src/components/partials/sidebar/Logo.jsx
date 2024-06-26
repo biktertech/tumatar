@@ -9,6 +9,7 @@ import useSkin from "@/hooks/useSkin";
 // import images
 import MobileLogo from "@/assets/images/logo/logo-c.svg";
 import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
+import TLogo from "@/assets/images/logo/tumatar-logo.svg";
 
 const SidebarLogo = ({ menuHover }) => {
   const [isDark] = useDarkMode();
@@ -33,7 +34,7 @@ const SidebarLogo = ({ menuHover }) => {
         <div className="flex items-center space-x-4">
           <div className="logo-icon">
             {!isDark && !isSemiDark ? (
-              <img src={MobileLogo} alt="" />
+              <img src={TLogo} alt="" className="w-10 h-10" />
             ) : (
               <img src={MobileLogoWhite} alt="" />
             )}
@@ -42,7 +43,7 @@ const SidebarLogo = ({ menuHover }) => {
           {(!collapsed || menuHover) && (
             <div>
               <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-                DashCode
+                Tumatar
               </h1>
             </div>
           )}

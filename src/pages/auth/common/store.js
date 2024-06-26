@@ -1,19 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
+import { registerUser } from "../../../api/user";
 
 const initialUsers = () => {
   const item = window.localStorage.getItem("users");
   return item
     ? JSON.parse(item)
     : [
-        {
-          id: uuidv4(),
-          name: "dashcode",
-          email: "dashcode@gmail.com",
-          password: "dashcode",
-        },
-      ];
+      {
+        id: uuidv4(),
+        name: "dashcode",
+        email: "dashcode@gmail.com",
+        password: "dashcode",
+      },
+    ];
 };
 // save users in local storage
 
@@ -31,37 +32,77 @@ export const authSlice = createSlice({
   reducers: {
     handleRegister: (state, action) => {
       const { name, email, password } = action.payload;
-      const user = state.users.find((user) => user.email === email);
-      if (user) {
-        toast.error("User already exists", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
+      registerUser({ name, email, password })
+        .then((resp) => {
+          console.log(resp.response.data.message);
+          if (resp.response.status === 400) {
+            toast.error(resp.response.data.message, {
+              position: "top-right",
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+          
+          toast.success("User registered successfully", {
+            position: "top-right",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("User already exists", {
+            position: "top-right",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         });
-      } else {
-        state.users.push({
-          id: uuidv4(),
-          name,
-          email,
-          password,
-        });
-        window.localStorage.setItem("users", JSON.stringify(state.users));
-        toast.success("User registered successfully", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
+      // const user = state.users.find((user) => user.email === email);
+      // if (user) {
+      //   toast.error("User already exists", {
+      //     position: "top-right",
+      //     autoClose: 1500,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //     theme: "light",
+      //   });
+      // } else {
+      //   state.users.push({
+      //     id: uuidv4(),
+      //     name,
+      //     email,
+      //     password,
+      //   });
+      //   window.localStorage.setItem("users", JSON.stringify(state.users));
+      //   toast.success("User registered successfully", {
+      //     position: "top-right",
+      //     autoClose: 1500,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //     theme: "light",
+      //   });
+      // }
     },
 
     handleLogin: (state, action) => {
