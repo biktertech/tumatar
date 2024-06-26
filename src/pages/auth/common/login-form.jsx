@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { handleLogin } from "./store";
 import { toast } from "react-toastify";
+import { loginUser } from "../../../api/user";
 const schema = yup
   .object({
     email: yup.string().email("Invalid email").required("Email is Required"),
@@ -29,16 +30,27 @@ const LoginForm = () => {
   });
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    const user = users.find(
-      (user) => user.email === data.email && user.password === data.password
-    );
-    if (user) {
-      dispatch(handleLogin(true));
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1500);
-    } else {
-      toast.error("Invalid credentials", {
+    loginUser(data).then((resp) => {
+      if (resp?.response?.status === 400) {
+        toast.error(resp?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        return;
+      }
+      
+      window.localStorage.setItem("isAuth", true);
+      window.localStorage.setItem("token", resp?.data?.access_token);
+
+      navigate("/dashboard");
+
+      toast.success("User login successfully", {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -48,7 +60,7 @@ const LoginForm = () => {
         progress: undefined,
         theme: "light",
       });
-    }
+    });
   };
 
   const [checked, setChecked] = useState(false);
@@ -58,7 +70,6 @@ const LoginForm = () => {
       <Textinput
         name="email"
         label="email"
-        defaultValue={users[0].email}
         type="email"
         register={register}
         error={errors.email}
@@ -67,7 +78,6 @@ const LoginForm = () => {
         name="password"
         label="passwrod"
         type="password"
-        defaultValue={users[0].password}
         register={register}
         error={errors.password}
       />

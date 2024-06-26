@@ -37,6 +37,11 @@ const initialMonochrome = () => {
   const item = window.localStorage.getItem("monochrome");
   return item ? JSON.parse(item) : themeConfig.layout.isMonochrome;
 };
+
+const checkAuth = () => {
+  return window.localStorage.getItem("isAuth");
+};
+
 const initialState = {
   isRTL: initialRtl(),
   darkMode: initialDarkMode(),
@@ -51,6 +56,7 @@ const initialState = {
   footerType: themeConfig.layout.footerType,
   mobileMenu: themeConfig.layout.mobileMenu,
   isMonochrome: initialMonochrome(),
+  isAuth: checkAuth(),
 };
 
 export const layoutSlice = createSlice({

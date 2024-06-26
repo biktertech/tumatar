@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Checkbox from "@/components/ui/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { handleRegister } from "./store";
+import { registerUser } from "../../../api/user";
 
 const schema = yup
   .object({
@@ -41,11 +42,50 @@ const RegForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    dispatch(handleRegister(data));
-    setTimeout(() => {
+    registerUser(data)
+    .then((resp) => {
+      if (resp?.response?.status === 400) {
+        toast.error(resp?.response?.data?.message, {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        return;
+      }
+      
+      toast.success("User registered successfully", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
       navigate("/");
-    }, 1500);
+    })
+    .catch((error) => {
+      toast.error("User already exists", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    });
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 ">
       <Textinput
