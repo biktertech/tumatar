@@ -3,11 +3,8 @@ import Textinput from "@/components/ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
 import Checkbox from "@/components/ui/Checkbox";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { handleLogin } from "./store";
 import { toast } from "react-toastify";
 import { loginUser } from "../../../api/user";
 const schema = yup
@@ -17,8 +14,6 @@ const schema = yup
   })
   .required();
 const LoginForm = () => {
-  const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.auth);
   const {
     register,
     formState: { errors },
@@ -28,7 +23,6 @@ const LoginForm = () => {
     //
     mode: "all",
   });
-  const navigate = useNavigate();
   const onSubmit = (data) => {
     loginUser(data).then((resp) => {
       if (resp?.response?.status === 400) {
@@ -48,7 +42,7 @@ const LoginForm = () => {
       window.localStorage.setItem("isAuth", true);
       window.localStorage.setItem("token", resp?.data?.access_token);
 
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
 
       toast.success("User login successfully", {
         position: "top-right",

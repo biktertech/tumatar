@@ -14,7 +14,6 @@ import ProtectedRoute from "../ProtectedRoute";
 
 function App() {
   const { isAuth } = useSelector((state) => state.layout);
-
   return (
     <main className="App  relative">
       <Routes>
