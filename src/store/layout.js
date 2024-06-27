@@ -56,6 +56,7 @@ const initialUser = async () => {
     const user = await getUser();
     return user.data;
   }
+  return Promise.resolve(null);
 };
 
 
