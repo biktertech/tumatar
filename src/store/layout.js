@@ -39,7 +39,9 @@ const initialMonochrome = () => {
 };
 
 const checkAuth = () => {
-  if (window.localStorage.getItem("isAuth") === "true" && window.localStorage.getItem("token") !== undefined) {
+  console.log(window.localStorage.getItem("isAuth"));
+  console.log(window.localStorage.getItem("token"));
+  if (window.localStorage.getItem("isAuth") === "true" && window.localStorage.getItem("token") !== undefined && window.localStorage.getItem("token") !== null && window.localStorage.getItem("token") !== "undefined") {
     return true;
   } else {
     return false;

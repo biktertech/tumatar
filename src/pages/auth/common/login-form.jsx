@@ -25,7 +25,8 @@ const LoginForm = () => {
   });
   const onSubmit = (data) => {
     loginUser(data).then((resp) => {
-      if (resp?.response?.status === 400) {
+      console.log("result", resp);
+      if (resp?.response?.status === 401) {
         toast.error(resp?.response?.data?.message, {
           position: "top-right",
           autoClose: 1500,
@@ -37,23 +38,25 @@ const LoginForm = () => {
           theme: "light",
         });
         return;
+      } 
+
+      if (resp?.status === 201){
+        window.localStorage.setItem("isAuth", true);
+        window.localStorage.setItem("token", resp?.data?.access_token);
+  
+        window.location.href = "/";
+  
+        toast.success("User login successfully", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
-      
-      window.localStorage.setItem("isAuth", true);
-      window.localStorage.setItem("token", resp?.data?.access_token);
-
-      window.location.href = "/";
-
-      toast.success("User login successfully", {
-        position: "top-right",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
     });
   };
 
