@@ -106,7 +106,7 @@ const RegForm = () => {
       />
       <Textinput
         name="password"
-        label="passwrod"
+        label="password"
         type="password"
         placeholder=" Enter your password"
         register={register}

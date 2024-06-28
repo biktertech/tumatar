@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 // image import
 import LogoWhite from "@/assets/images/logo/logo-white.svg";
 import Logo from "@/assets/images/logo/logo.svg";
-import TLogo from "@/assets/images/logo/tumatar-logo.svg";
+import TLogo from "@/assets/images/logo/cropped-tumatar-logo-removebg-preview.png";
 
 const login = () => {
   const [isDark] = useDarkMode();
@@ -66,7 +66,7 @@ const login = () => {
                 </div>
               </div>
               <div className="auth-footer text-center">
-                Copyright 2021, Dashcode All Rights Reserved.
+              COPYRIGHT &copy; 2024 Tumatar
               </div>
             </div>
           </div>

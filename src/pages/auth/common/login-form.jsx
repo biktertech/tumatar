@@ -68,15 +68,17 @@ const LoginForm = () => {
         name="email"
         label="email"
         type="email"
+           placeholder=" Enter your email"
         register={register}
         error={errors.email}
       />
       <Textinput
         name="password"
-        label="passwrod"
+        label="password"
         type="password"
         register={register}
         error={errors.password}
+          placeholder=" Enter your password"
       />
       <div className="flex justify-between">
         <Checkbox
