@@ -17,7 +17,6 @@ import ProtectedRoute from "../ProtectedRoute";
 
 function App() {
   const { isAuth } = useSelector((state) => state.layout);
-
   return (
     <main className="App  relative">
       <Routes>
@@ -77,7 +76,7 @@ function App() {
         </Route>
         <Route path="/*" element={<Layout />}>
           <Route
-            path="chat"
+            path="chat/:id"
             element={
               <ProtectedRoute>
                 <Chat />

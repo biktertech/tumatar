@@ -207,14 +207,15 @@ export const appChatSlice = createSlice({
         ],
       },
     ],
+    conversation: []
   },
   reducers: {
     openChat: (state, action) => {
       state.activechat = action.payload.activechat;
       state.mobileChatSidebar = !state.mobileChatSidebar;
       state.user = action.payload.contact;
-      state.chats.map((item) => {
-        if (item.userId === action.payload.contact.id) {
+      state.conversation.map((item) => {
+        if (item.conversation_id === action.payload.contact.conversation_id) {
           state.messFeed = item.messages;
         }
       });
@@ -238,6 +239,61 @@ export const appChatSlice = createSlice({
     toggleActiveChat: (state, action) => {
       state.activechat = action.payload;
     },
+    setConversation: (state, action) => {
+      state.conversation = action.payload;
+    },
+    // updateConversationMessageById: (state, action) => {
+    //   const { conversationId, message } = action.payload;
+    //   console.log('conversationId', conversationId)
+    //   // update messFeed with new message and against conversationId
+    //   state.conversation.map((item) => {
+    //     if (item.conversation_id === conversationId) {
+    //       state.messFeed = message
+    //     } else {
+    //       state.messFeed = message;
+    //       // add on top of the conversation
+    //       state.conversation.unshift({
+    //         conversation_id: conversationId,
+    //         messages: message,
+    //         title: message[0].content,
+    //       });
+    //     }
+    //   });
+    // },
+
+    updateConversationMessageById: (state, action) => {
+      const { conversationId, message } = action.payload;
+      console.log('conversationId', conversationId);
+      
+      // Check if the conversation exists
+      const conversationIndex = state.conversation.findIndex(
+        (item) => item.conversation_id === conversationId
+      );
+    
+      if (conversationIndex !== -1) {
+        // Update the messages of the found conversation
+        state.conversation[conversationIndex].messages = message;
+        // Update the messFeed with the new message
+        state.messFeed = message;
+      } else {
+        // If conversationId is not found, add a new conversation at the top
+        state.conversation.unshift({
+          conversation_id: conversationId,
+          messages: message,
+          title: state.conversation.length + 1,
+        });
+        // Update the messFeed with the new message
+        state.messFeed = message;
+      }
+    },
+    
+
+    openNewChat: (state, action) => {
+      state.activechat = action.payload.activechat;
+      state.mobileChatSidebar = !state.mobileChatSidebar;
+      state.user = action.payload.contact;
+      state.messFeed = [];
+    }
   },
 });
 
@@ -249,5 +305,8 @@ export const {
   toggleProfile,
   setContactSearch,
   toggleActiveChat,
+  setConversation,
+  updateConversationMessageById,
+  openNewChat
 } = appChatSlice.actions;
 export default appChatSlice.reducer;

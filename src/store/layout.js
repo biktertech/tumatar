@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // theme config import
 import themeConfig from "@/configs/themeConfig";
+import { getUser } from "../api/user";
+import { json } from "react-router-dom";
 
 const initialDarkMode = () => {
   const item = window.localStorage.getItem("darkMode");
@@ -39,8 +41,24 @@ const initialMonochrome = () => {
 };
 
 const checkAuth = () => {
-  return window.localStorage.getItem("isAuth");
+  console.log(window.localStorage.getItem("isAuth"));
+  console.log(window.localStorage.getItem("token"));
+  if (window.localStorage.getItem("isAuth") === "true" && window.localStorage.getItem("token") !== undefined && window.localStorage.getItem("token") !== null && window.localStorage.getItem("token") !== "undefined") {
+    return true;
+  } else {
+    return false;
+  }
 };
+
+const initialUser = async () => {
+  if (checkAuth()) {
+    console.log("user");
+    const user = await getUser();
+    return user.data;
+  }
+  return Promise.resolve(null);
+};
+
 
 const initialState = {
   isRTL: initialRtl(),
@@ -57,6 +75,7 @@ const initialState = {
   mobileMenu: themeConfig.layout.mobileMenu,
   isMonochrome: initialMonochrome(),
   isAuth: checkAuth(),
+  user: {},
 };
 
 export const layoutSlice = createSlice({

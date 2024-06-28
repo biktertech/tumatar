@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import SidebarLogo from "./Logo";
 import Navmenu from "./Navmenu";
-import { menuItems } from "@/constant/data";
+import { menuItems as initialMenuItems} from "@/constant/data";
 import SimpleBar from "simplebar-react";
 import useSidebar from "@/hooks/useSidebar";
 import useSemiDark from "@/hooks/useSemiDark";
 import useSkin from "@/hooks/useSkin";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
 import { NavLink } from "react-router-dom";
+import { getContent } from "../../../api/content";
 
 const Sidebar = () => {
   const scrollableNodeRef = useRef();
@@ -26,11 +27,40 @@ const Sidebar = () => {
 
   const [collapsed, setMenuCollapsed] = useSidebar();
   const [menuHover, setMenuHover] = useState(false);
+  const [menuItems, setMenuItems] = useState(initialMenuItems);
 
   // semi dark option
   const [isSemiDark] = useSemiDark();
   // skin
   const [skin] = useSkin();
+
+  const fetchContent = async () => {
+    try {
+      const content = await getContent();
+      const contentData = content?.data || [];
+
+      const newChildItems = contentData.map(item => ({
+        childtitle: item.content_title,
+        childlink: `chat/${item.content_id}`, 
+      }));
+
+      const updatedMenuItems = menuItems.map(menuItem => {
+        if (menuItem.title === "Courses") {
+          return {
+            ...menuItem,
+            child: [...newChildItems],
+          };
+        }
+        return menuItem;
+      });
+
+      setMenuItems(updatedMenuItems);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    }
+  };
+
+  useEffect(() => { fetchContent() }, []);
   return (
     <div className={isSemiDark ? "dark" : ""}>
       <div

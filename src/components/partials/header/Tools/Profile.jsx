@@ -8,9 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import UserAvatar from "@/assets/images/logo/20171206_01.jpg";
 
 const profileLabel = () => {
+  const user = useSelector((state) => state.layout.user);
+  console.log(user);
   return (
     <div className="flex items-center">
-      <div className="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
+      {/* <div className="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
         <div className="lg:h-8 lg:w-8 h-7 w-7 rounded-full">
           <img
             src={UserAvatar}
@@ -18,7 +20,7 @@ const profileLabel = () => {
             className="block w-full h-full object-cover rounded-full"
           />
         </div>
-      </div>
+      </div> */}
       <div className="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
         <span className="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block">
           Tariq Rasheed
@@ -45,52 +47,12 @@ const Profile = () => {
       },
     },
     {
-      label: "Chat",
-      icon: "heroicons-outline:chat",
-      action: () => {
-        console.log("chat");
-      },
-    },
-    {
-      label: "Email",
-      icon: "heroicons-outline:mail",
-      action: () => {
-        console.log("email");
-      },
-    },
-    {
-      label: "Todo",
-      icon: "heroicons-outline:clipboard-check",
-      action: () => {
-        console.log("todo");
-      },
-    },
-    {
-      label: "Settings",
-      icon: "heroicons-outline:cog",
-      action: () => {
-        console.log("settings");
-      },
-    },
-    {
-      label: "Price",
-      icon: "heroicons-outline:credit-card",
-      action: () => {
-        console.log("price");
-      },
-    },
-    {
-      label: "Faq",
-      icon: "heroicons-outline:information-circle",
-      action: () => {
-        console.log("faq");
-      },
-    },
-    {
       label: "Logout",
       icon: "heroicons-outline:login",
       action: () => {
-        console.log("logout");
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("isAuth");
+        window.location.reload();
       },
     },
   ];

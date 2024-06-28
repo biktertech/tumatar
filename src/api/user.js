@@ -17,3 +17,12 @@ export const loginUser = async (data) => {
         return error;
     }
 };
+
+export const getUser = async () => {
+    try {
+        const resp = await axios.get("/user/profile");
+        return resp;
+    } catch (error) {
+        return error;
+    }
+};

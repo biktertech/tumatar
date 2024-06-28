@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { openChat } from "./store";
 import Icons from "../../../components/ui/Icon";
 
-const Contacts = ({ contact }) => {
-  const { fullName, avatar, status, lastmessage, unredmessage } = contact;
+const Contacts = ({ contact, index }) => {
+  const { title, avatar, status, lastmessage, unredmessage } = contact;
 
   const dispatch = useDispatch();
 
@@ -37,7 +37,8 @@ const Contacts = ({ contact }) => {
         </div> */}
         <div className="flex items-center justify-between w-full">
           <span className="text-blue-600 dark:text-slate-300 text-sm font-semibold mb-[2px]">
-            {fullName.slice(0, 12) + (fullName.length > 12 ? "..." : "")}
+            {/* {title.slice(0, 12) + (title.length > 12 ? "..." : "")} */}
+            {index + 1}
           </span>
           <Icons
             icon={"heroicons-outline:pencil"}

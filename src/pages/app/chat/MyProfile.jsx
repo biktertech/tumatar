@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
 import Radio from "@/components/ui/Radio";
-import { toggleProfile } from "./store";
+import { openChat, openNewChat, toggleProfile } from "./store";
 
 import MainUser from "@/assets/images/users/user-1.jpg";
 
@@ -34,11 +34,14 @@ const allStatus = [
 
 import SimpleBar from "simplebar-react";
 import Icons from "../../../components/ui/Icon";
+import { useParams } from "react-router-dom";
 const MyProfile = () => {
   const { openProfile } = useSelector((state) => state.chat);
+  const {id} = useParams();
   const [status, setStatus] = useState("online");
   const nodeRef = useRef(null);
   const dispatch = useDispatch();
+
 
   return (
     <div>
@@ -71,6 +74,12 @@ const MyProfile = () => {
           >
           <button
           className="bg-blue-600 text-white rounded-md px-5 p-1"
+          onClick={() => {
+            dispatch(openNewChat({
+              contact:{title:"New Chat", content_id:id},
+              activechat: true,
+            }))
+          }}
           >
             New Chat
             </button>           
