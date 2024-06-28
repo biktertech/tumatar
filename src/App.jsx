@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 //import Dashboard from "./pages/dashboard";
 const Dashboard = lazy(() => import("./pages/dashboard"));
 const Courses = lazy(() => import("./pages/table/courses/index"));
+const CreateCourse= lazy(() => import("./pages/forms/CreateCourse"));
 const Login = lazy(() => import("./pages/auth/login"));
 const Register = lazy(() => import("./pages/auth/register"));
 const Chat = lazy(() => import("./pages/app/chat/index"));
@@ -66,6 +67,16 @@ function App() {
         </Route>
         <Route path="/*" element={<Layout />}>
           <Route
+            path="create/course"
+            element={
+              <ProtectedRoute>
+                <CreateCourse />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
             path="chat"
             element={
               <ProtectedRoute>
@@ -74,6 +85,7 @@ function App() {
             }
           />
         </Route>
+
         
       </Routes>
     </main>

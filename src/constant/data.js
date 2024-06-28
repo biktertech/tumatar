@@ -11,9 +11,14 @@ export const menuItems = [
     isHide: true,
     child: [
       {
+        childtitle: "Courses",
+        childlink: "courses",
+      },
+      {
         childtitle: "Chat",
         childlink: "chat",
       },
+     
     ],
   },
   // {

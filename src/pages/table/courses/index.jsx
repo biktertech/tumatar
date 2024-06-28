@@ -1,67 +1,259 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Card from "@/components/ui/Card";
+import { advancedTable } from "../../../constant/table-data";
+import {
+  useTable,
+  useRowSelect,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+} from "react-table";
+import GlobalFilter from "./GlobalFilter";
+import Icon from "@/components/ui/Icon";
+import Dropdown from "@/components/ui/Dropdown";
+import { Menu } from "@headlessui/react";
+import { NavLink } from "react-router-dom";
+
+const COLUMNS = [
+  // {
+  //   Header: "Id",
+  //   accessor: "id",
+  //   Cell: (row) => {
+  //     return <span>{row?.cell?.value}</span>;
+  //   },
+  // },
+  {
+    Header: "Title",
+    accessor: "order",
+    Cell: (row) => {
+      return <span>#{row?.cell?.value}</span>;
+    },
+  },
+  // {
+  //   Header: "customer",
+  //   accessor: "customer",
+  //   Cell: (row) => {
+  //     return (
+  //       <div>
+  //         <span className="inline-flex items-center">
+  //           <span className="w-7 h-7 rounded-full ltr:mr-3 rtl:ml-3 flex-none bg-slate-600">
+  //             <img
+  //               src={row?.cell?.value.image}
+  //               alt=""
+  //               className="object-cover w-full h-full rounded-full"
+  //             />
+  //           </span>
+  //           <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
+  //             {row?.cell?.value.name}
+  //           </span>
+  //         </span>
+  //       </div>
+  //     );
+  //   },
+  // },
+  // {
+  //   Header: "date",
+  //   accessor: "date",
+  //   Cell: (row) => {
+  //     return <span>{row?.cell?.value}</span>;
+  //   },
+  // },
+  {
+    Header: "Description",
+    accessor: "quantity",
+    Cell: (row) => {
+      return <span>{row?.cell?.value}</span>;
+    },
+  },
+  {
+    Header: "Link",
+    accessor: "amount",
+    Cell: (row) => {
+      return <span>{row?.cell?.value}</span>;
+    },
+  },
+  // {
+  //   Header: "status",
+  //   accessor: "status",
+  //   Cell: (row) => {
+  //     return (
+  //       <span className="block w-full">
+  //         <span
+  //           className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
+  //             row?.cell?.value === "paid"
+  //               ? "text-success-500 bg-success-500"
+  //               : ""
+  //           } 
+  //           ${
+  //             row?.cell?.value === "due"
+  //               ? "text-warning-500 bg-warning-500"
+  //               : ""
+  //           }
+  //           ${
+  //             row?.cell?.value === "cancled"
+  //               ? "text-danger-500 bg-danger-500"
+  //               : ""
+  //           }
+            
+  //            `}
+  //         >
+  //           {row?.cell?.value}
+  //         </span>
+  //       </span>
+  //     );
+  //   },
+  // },
+  {
+    Header: "action",
+    accessor: "action",
+    Cell: (row) => {
+      return (
+        <div>
+          <Dropdown
+            classMenuItems="right-0 w-[140px] top-[110%] "
+            label={
+              <span className="text-xl text-center block w-full">
+                <Icon icon="heroicons-outline:dots-vertical" />
+              </span>
+            }
+          >
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+              {actions.map((item, i) => (
+                <Menu.Item key={i}>
+                  <div
+                    className={`
+                
+                  ${
+                    item.name === "delete"
+                      ? "bg-danger-500 text-danger-500 bg-opacity-30   hover:bg-opacity-100 hover:text-white"
+                      : "hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50"
+                  }
+                   w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer 
+                   first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse `}
+                  >
+                    <span className="text-base">
+                      <Icon icon={item.icon} />
+                    </span>
+                    <span>{item.name}</span>
+                  </div>
+                </Menu.Item>
+              ))}
+            </div>
+          </Dropdown>
+        </div>
+      );
+    },
+  },
+];
+const actions = [
+  {
+    name: "view",
+    icon: "heroicons-outline:eye",
+  },
+  {
+    name: "edit",
+    icon: "heroicons:pencil-square",
+  },
+  {
+    name: "delete",
+    icon: "heroicons-outline:trash",
+  },
+];
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef();
+    const resolvedRef = ref || defaultRef;
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <>
+        <input
+          type="checkbox"
+          ref={resolvedRef}
+          {...rest}
+          className="table-checkbox"
+        />
+      </>
+    );
+  }
+);
 
 const courses = () => {
-  // const columns = useMemo(() => COLUMNS, []);
-  // const data = useMemo(() => advancedTable, []);
-  // const tableInstance = useTable(
-  //   {
-  //     columns,
-  //     data,
-  //   },
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => advancedTable, []);
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+    },
 
-  //   useGlobalFilter,
-  //   useSortBy,
-  //   usePagination,
-  //   useRowSelect,
+    useGlobalFilter,
+    useSortBy,
+    usePagination,
+    useRowSelect,
 
-  //   (hooks) => {
-  //     hooks.visibleColumns.push((columns) => [
-  //       {
-  //         id: "selection",
-  //         Header: ({ getToggleAllRowsSelectedProps }) => (
-  //           <div>
-  //             <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-  //           </div>
-  //         ),
-  //         Cell: ({ row }) => (
-  //           <div>
-  //             <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-  //           </div>
-  //         ),
-  //       },
-  //       ...columns,
-  //     ]);
-  //   }
-  // );
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   footerGroups,
-  //   page,
-  //   nextPage,
-  //   previousPage,
-  //   canNextPage,
-  //   canPreviousPage,
-  //   pageOptions,
-  //   state,
-  //   gotoPage,
-  //   pageCount,
-  //   setPageSize,
-  //   setGlobalFilter,
-  //   prepareRow,
-  // } = tableInstance;
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        {
+          id: "selection",
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    }
+  );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    footerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    state,
+    gotoPage,
+    pageCount,
+    setPageSize,
+    setGlobalFilter,
+    prepareRow,
+  } = tableInstance;
+  const { globalFilter, pageIndex, pageSize } = state;
   return (
     <div>
       <Card
       >
-        <h1 className="text-2xl font-bold">Courses</h1>
+        <div className="md:flex justify-end items-center mb-6">
+          <div>
+          <NavLink to="/create/course">
+           <button
+            className="bg-blue-600 text-white px-3 py-1 rounded-md"
+            >
+              Create Course
+            </button>
+            </NavLink>
+          </div>
+        </div>
         {/* <div className="md:flex justify-between items-center mb-6">
-          <h4 className="card-title">Advanced Table</h4>
+          <h4 className="card-title">Courses</h4>
           <div>
             <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
           </div>
+         
         </div>
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
