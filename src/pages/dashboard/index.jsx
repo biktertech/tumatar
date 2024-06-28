@@ -4,7 +4,9 @@ import Card from "@/components/ui/Card";
 const Dashboard = () => {
   return (
     <div>
-      <Card title="Starter Kit">Your Dashboard</Card>
+      <Card>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+      </Card>
     </div>
   );
 };

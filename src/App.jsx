@@ -4,8 +4,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // home pages  & dashboard
 //import Dashboard from "./pages/dashboard";
 const Dashboard = lazy(() => import("./pages/dashboard"));
+const Courses = lazy(() => import("./pages/table/courses/index"));
 const Login = lazy(() => import("./pages/auth/login"));
 const Register = lazy(() => import("./pages/auth/register"));
+const Chat = lazy(() => import("./pages/app/chat/index"));
 
 import Layout from "./layout/Layout";
 import Loading from "@/components/Loading";
@@ -52,6 +54,27 @@ function App() {
             }
           />
         </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
+            path="courses"
+            element={
+              <ProtectedRoute>
+                <Courses />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
+            path="chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        
       </Routes>
     </main>
   );

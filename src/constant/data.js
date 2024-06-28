@@ -5,10 +5,28 @@ export const menuItems = [
   },
 
   {
-    title: "Dashboard",
-    icon: "heroicons-outline:home",
-    link: "dashboard",
+    title: "Courses",
+    icon: "heroicons-outline:academic-cap",
+    isOpen: true,
+    isHide: true,
+    child: [
+      {
+        childtitle: "Chat",
+        childlink: "chat",
+      },
+    ],
   },
+  // {
+  //   title:"Courses",
+  //   icon:"heroicons-outline:academic-cap",
+  //   link:"courses"
+  // },
+  // {
+  //   title:"Chat",
+  //   icon:"heroicons-outline:chat-alt",
+  //   link:"chat"
+  
+  // }
 ];
 
 export const topMenu = [

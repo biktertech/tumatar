@@ -56,6 +56,12 @@ const Sidebar = () => {
             scroll ? " opacity-100" : " opacity-0"
           }`}
         ></div>
+        {/* create courses button */}
+        {/* <button
+        className="bg-blue-700 text-white"
+        >
+          Create Courses
+        </button> */}
 
         <SimpleBar
           className="sidebar-menu px-4 h-[calc(100%-80px)]"
