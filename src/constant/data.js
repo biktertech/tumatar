@@ -1,4 +1,4 @@
-export const menuItems = [
+export let menuItems = [
   {
     isHeadr: true,
     title: "menu",
@@ -9,12 +9,7 @@ export const menuItems = [
     icon: "heroicons-outline:academic-cap",
     isOpen: true,
     isHide: true,
-    child: [
-      {
-        childtitle: "Chat",
-        childlink: "chat",
-      },
-    ],
+    child: [],
   },
   // {
   //   title:"Courses",

@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import SidebarLogo from "./Logo";
 import Navmenu from "./Navmenu";
-import { menuItems } from "@/constant/data";
+import { menuItems as initialMenuItems} from "@/constant/data";
 import SimpleBar from "simplebar-react";
 import useSidebar from "@/hooks/useSidebar";
 import useSemiDark from "@/hooks/useSemiDark";
 import useSkin from "@/hooks/useSkin";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
+import { getContent } from "../../../api/content";
 
 const Sidebar = () => {
   const scrollableNodeRef = useRef();
@@ -25,23 +26,50 @@ const Sidebar = () => {
 
   const [collapsed, setMenuCollapsed] = useSidebar();
   const [menuHover, setMenuHover] = useState(false);
+  const [menuItems, setMenuItems] = useState(initialMenuItems);
 
   // semi dark option
   const [isSemiDark] = useSemiDark();
   // skin
   const [skin] = useSkin();
+
+  const fetchContent = async () => {
+    try {
+      const content = await getContent();
+      const contentData = content?.data || [];
+
+      const newChildItems = contentData.map(item => ({
+        childtitle: item.content_title,
+        childlink: `chat/${item.content_id}`, 
+      }));
+
+      const updatedMenuItems = menuItems.map(menuItem => {
+        if (menuItem.title === "Courses") {
+          return {
+            ...menuItem,
+            child: [...newChildItems],
+          };
+        }
+        return menuItem;
+      });
+
+      setMenuItems(updatedMenuItems);
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    }
+  };
+
+  useEffect(() => { fetchContent() }, []);
   return (
     <div className={isSemiDark ? "dark" : ""}>
       <div
-        className={`sidebar-wrapper bg-white dark:bg-slate-800     ${
-          collapsed ? "w-[72px] close_sidebar" : "w-[248px]"
-        }
+        className={`sidebar-wrapper bg-white dark:bg-slate-800     ${collapsed ? "w-[72px] close_sidebar" : "w-[248px]"
+          }
       ${menuHover ? "sidebar-hovered" : ""}
-      ${
-        skin === "bordered"
-          ? "border-r border-slate-200 dark:border-slate-700"
-          : "shadow-base"
-      }
+      ${skin === "bordered"
+            ? "border-r border-slate-200 dark:border-slate-700"
+            : "shadow-base"
+          }
       `}
         onMouseEnter={() => {
           setMenuHover(true);
@@ -52,9 +80,8 @@ const Sidebar = () => {
       >
         <SidebarLogo menuHover={menuHover} />
         <div
-          className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${
-            scroll ? " opacity-100" : " opacity-0"
-          }`}
+          className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"
+            }`}
         ></div>
         {/* create courses button */}
         {/* <button

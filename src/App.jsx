@@ -65,7 +65,7 @@ function App() {
         </Route>
         <Route path="/*" element={<Layout />}>
           <Route
-            path="chat"
+            path="chat/:id"
             element={
               <ProtectedRoute>
                 <Chat />

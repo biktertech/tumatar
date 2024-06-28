@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleMobileChatSidebar, infoToggle, sendMessage } from "./store";
+import { toggleMobileChatSidebar, infoToggle, sendMessage, updateConversationMessageById } from "./store";
 import useWidth from "@/hooks/useWidth";
 import Icon from "@/components/ui/Icon";
 import Dropdown from "@/components/ui/Dropdown";
 import image1 from "@/assets/images/users/user-1.jpg";
 import TLogo from "@/assets/images/logo/tumatar-logo.svg";
 import Icons from "../../../components/ui/Icon";
+import { sendMsg } from "../../../api/conversation";
+import { set } from "react-hook-form";
 
 const chatAction = [
   {
@@ -32,19 +34,34 @@ const Chat = () => {
   const { activechat, openinfo, mobileChatSidebar, messFeed, user } =
     useSelector((state) => state.chat);
   const { width, breakpoints } = useWidth();
+  const [newMessage, setNewMessage] = React.useState("");
   const dispatch = useDispatch();
 
-  const handleSendMessage = (e) => {
-    if (e.target.value) {
-      dispatch(
-        sendMessage({
-          content: e.target.value,
-          sender: "me",
-          img: image1,
-        })
-      );
+  const handleSendMessage = async (e) => {
+    let _message = newMessage;
+    if (_message) {
+      setNewMessage("");
+      dispatch(sendMessage({ role: "user", content: _message }));
+      dispatch(sendMessage({ role: "assistant", content: 'Please wait...' }));
+      const payload = {
+        message: _message,
+      };
+
+      if (user?.title !== "New Chat") {
+        payload.conversation_id = user?.conversation_id;
+      }
+
+      const resp = await sendMsg(user?.content_id, payload);
+
+      if(resp.status === 201){
+        dispatch(updateConversationMessageById({
+          conversationId: resp.data.conversation_id,
+          message: resp.data.messages
+        }));
+      }
     }
-    e.target.value = "";
+
+    setNewMessage("");
   };
   const chatheight = useRef(null);
   useEffect(() => {
@@ -117,7 +134,7 @@ const Chat = () => {
                 </div>
                 <div className="flex flex-col justify-center ml-3">
                   <h1 className="text-slate-800 dark:text-slate-300 text-lg font-medium truncate">
-                    {user.fullName}
+                    {user.title}
                   </h1>
                 </div>
               </div>
@@ -142,7 +159,7 @@ const Chat = () => {
         >
           {messFeed.map((item, i) => (
             <div className="block md:px-6 px-4" key={i}>
-              {item.sender === "them" && (
+              {item.role === "assistant" && (
                 <div className="flex space-x-2 items-start group rtl:space-x-reverse">
                   <div className="flex-none">
                     <div className="h-8 w-8 rounded-full">
@@ -177,7 +194,7 @@ const Chat = () => {
                 </div>
               )}
               {/* sender */}
-              {item.sender === "me" && (
+              {item.role === "user" && (
                 <div className="flex space-x-2 items-start justify-end group w-full rtl:space-x-reverse">
                   <div className="no flex space-x-4 rtl:space-x-reverse">
                     <div className="opacity-0 invisible group-hover:opacity-100 group-hover:visible">
@@ -203,11 +220,11 @@ const Chat = () => {
                   </div>
                   <div className="flex-none">
                     <div className="h-8 w-8 rounded-full">
-                      <img
+                      {/* <img
                         src={user.avatar}
                         alt=""
                         className="block w-full h-full object-cover rounded-full"
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -235,6 +252,8 @@ const Chat = () => {
               // v-model.trim="newMessage"
               // @keydown.enter.exact.prevent="sendMessage"
               // @keydown.enter.shift.exact.prevent="newMessage += '\n'"
+              onChange={(e) => setNewMessage(e.target.value)}
+              value={newMessage}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -247,6 +266,7 @@ const Chat = () => {
             <button
               type="button"
               className="h-8 w-8 bg-slate-900 text-white flex flex-col justify-center items-center text-lg rounded-full"
+              onClick={handleSendMessage}
             >
               <Icon
                 icon="heroicons-outline:paper-airplane"
