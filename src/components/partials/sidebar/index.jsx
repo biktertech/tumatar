@@ -7,6 +7,7 @@ import useSidebar from "@/hooks/useSidebar";
 import useSemiDark from "@/hooks/useSemiDark";
 import useSkin from "@/hooks/useSkin";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
+import { NavLink } from "react-router-dom";
 import { getContent } from "../../../api/content";
 
 const Sidebar = () => {
@@ -79,6 +80,18 @@ const Sidebar = () => {
         }}
       >
         <SidebarLogo menuHover={menuHover} />
+        {/* create couse button */}
+        <div
+          className={`h-[60px] absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pl-4 ${collapsed ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+            }`}
+        >
+          <NavLink to="create/course">
+            <button className="bg-blue-600 text-white rounded-md px-3 p-1">
+              Create Course
+            </button>
+          </NavLink>
+        </div>
+
         <div
           className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"
             }`}
