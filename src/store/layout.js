@@ -75,7 +75,7 @@ const initialState = {
   mobileMenu: themeConfig.layout.mobileMenu,
   isMonochrome: initialMonochrome(),
   isAuth: checkAuth(),
-  user: await initialUser(),
+  user: {},
 };
 
 export const layoutSlice = createSlice({
