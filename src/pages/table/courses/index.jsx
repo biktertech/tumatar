@@ -248,7 +248,7 @@ const courses = () => {
             </NavLink>
           </div>
         </div>
-        {/* <div className="md:flex justify-between items-center mb-6">
+        <div className="md:flex justify-between items-center mb-6">
           <h4 className="card-title">Courses</h4>
           <div>
             <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -377,7 +377,7 @@ const courses = () => {
               </button>
             </li>
           </ul>
-        </div> */}
+        </div>
       </Card>
 
     </div>

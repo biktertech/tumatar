@@ -66,6 +66,16 @@ function App() {
         </Route>
         <Route path="/*" element={<Layout />}>
           <Route
+            path="course/list"
+            element={
+              <ProtectedRoute>
+                <Courses />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
             path="create/course"
             element={
               <ProtectedRoute>
