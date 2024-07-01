@@ -71,7 +71,7 @@ const courses = () => {
   useEffect(() => { fetchContent(); }, []);
   return (
     <div className="grid xl:grid-cols-1 grid-cols-1 gap-5">
-      <Card title="basic table" noborder>
+      <Card title="Course List" noborder>
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden ">

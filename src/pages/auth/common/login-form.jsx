@@ -44,7 +44,7 @@ const LoginForm = () => {
         window.localStorage.setItem("isAuth", true);
         window.localStorage.setItem("token", resp?.data?.access_token);
   
-        window.location.href = "/";
+        window.location.href = "/course/list";
   
         toast.success("User login successfully", {
           position: "top-right",
