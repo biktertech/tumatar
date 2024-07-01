@@ -280,7 +280,7 @@ export const appChatSlice = createSlice({
         state.conversation.unshift({
           conversation_id: conversationId,
           messages: message,
-          title: state.conversation.length + 1,
+          conversation_title: `Conversation #${state.conversation.length + 1}`,
         });
         // Update the messFeed with the new message
         state.messFeed = message;
