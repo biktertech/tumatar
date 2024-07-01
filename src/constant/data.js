@@ -3,7 +3,11 @@ export let menuItems = [
     isHeadr: true,
     title: "menu",
   },
-
+  {
+    title:"Courses List",
+    icon:"heroicons-outline:academic-cap",
+    link:"course/list"
+  },
   {
     title: "Courses",
     icon: "heroicons-outline:academic-cap",
@@ -11,11 +15,7 @@ export let menuItems = [
     isHide: true,
     child: [],
   },
-  // {
-  //   title:"Courses",
-  //   icon:"heroicons-outline:academic-cap",
-  //   link:"courses"
-  // },
+  
   // {
   //   title:"Chat",
   //   icon:"heroicons-outline:chat-alt",
