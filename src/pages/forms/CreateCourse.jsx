@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { createContent } from "../../api/content";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -36,6 +37,8 @@ const CreateCourse = () => {
     mode: "all",
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) =>{
     try {
       const resp = await createContent(data);
@@ -52,6 +55,8 @@ const CreateCourse = () => {
           progress: undefined,
           theme: "light",
         });
+
+        navigate("/course/list");
       }
     } catch (error) {
       console.log(error);

@@ -6,7 +6,7 @@ import SimpleBar from "simplebar-react";
 import useSemiDark from "@/hooks/useSemiDark";
 import useSkin from "@/hooks/useSkin";
 import useDarkMode from "@/hooks/useDarkMode";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import useMobileMenu from "@/hooks/useMobileMenu";
 import Icon from "@/components/ui/Icon";
 
@@ -14,6 +14,7 @@ import Icon from "@/components/ui/Icon";
 import MobileLogo from "@/assets/images/logo/logo-c.svg";
 import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
+import Tlogo from "@/assets/images/logo/Tumatar SVG 1.svg";
 
 const MobileMenu = () => {
   const scrollableNodeRef = useRef();
@@ -41,16 +42,16 @@ const MobileMenu = () => {
           <div className="flex items-center space-x-4">
             <div className="logo-icon">
               {!isDark && !isSemiDark ? (
-                <img src={MobileLogo} alt="" />
+                <img src={Tlogo} alt="" />
               ) : (
-                <img src={MobileLogoWhite} alt="" />
+                <img src={Tlogo} alt="" />
               )}
             </div>
-            <div>
+            {/* <div>
               <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                 DashCode
               </h1>
-            </div>
+            </div> */}
           </div>
         </Link>
         <button
@@ -62,10 +63,15 @@ const MobileMenu = () => {
         </button>
       </div>
 
+      <NavLink to="create/course">
+        <button className="bg-blue-600 text-white rounded-md px-3 p-1 mx-3">
+          Create Course
+        </button>
+      </NavLink>
+
       <div
-        className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${
-          scroll ? " opacity-100" : " opacity-0"
-        }`}
+        className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"
+          }`}
       ></div>
       <SimpleBar
         className="sidebar-menu px-4 h-[calc(100%-80px)]"

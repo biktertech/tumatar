@@ -17,3 +17,12 @@ export const createContent = async (data) => {
         return error;
     }
 };
+
+export const deleteContent = async (id) => {
+    try {
+        const resp = await axios.delete(`/content/${id}`);
+        return resp;
+    } catch (error) {
+        return error;
+    }
+};
