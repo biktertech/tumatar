@@ -4,7 +4,7 @@ import { openChat } from "./store";
 import Icons from "../../../components/ui/Icon";
 
 const Contacts = ({ contact, index }) => {
-  const { title, avatar, status, lastmessage, unredmessage } = contact;
+  const { title, avatar, status, lastmessage, unredmessage, conversation_title } = contact;
 
   const dispatch = useDispatch();
 
@@ -37,8 +37,7 @@ const Contacts = ({ contact, index }) => {
         </div> */}
         <div className="flex items-center justify-between w-full">
           <span className="text-blue-600 dark:text-slate-300 text-sm font-semibold mb-[2px]">
-            {/* {title.slice(0, 12) + (title.length > 12 ? "..." : "")} */}
-            {index + 1}
+            {conversation_title}
           </span>
           <Icons
             icon={"heroicons-outline:pencil"}

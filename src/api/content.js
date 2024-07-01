@@ -8,3 +8,12 @@ export const getContent = async () => {
         return error;
     }
 };
+
+export const createContent = async (data) => {
+    try {
+        const resp = await axios.post("/content", data);
+        return resp;
+    } catch (error) {
+        return error;
+    }
+};

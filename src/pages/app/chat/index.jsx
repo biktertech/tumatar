@@ -34,7 +34,7 @@ const ChatPage = () => {
       // Fetch messages and set titles for each conversation
       const updatedConversations = await Promise.all(
         conversationData.map(async (conversation) => {
-          const messages = await getMessages(conversation.conversation_id);
+          const messages = await getMessages(id,conversation.conversation_id);
           const firstMessage = messages?.data?.messages[0]?.content || { content: "No messages yet" };
 
           return {

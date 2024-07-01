@@ -10,9 +10,9 @@ export const getConversations = async (id) => {
     }
 };
 
-export const getMessages = async (id) => {
+export const getMessages = async (content_id,id) => {
     try {
-        const resp = await axios.get(`/content/17/conversation/${id}`);
+        const resp = await axios.get(`/content/${content_id}/conversation/${id}`);
         return resp;
     } catch (error) {
         return error;
