@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // home pages  & dashboard
@@ -14,9 +14,24 @@ import Layout from "./layout/Layout";
 import Loading from "@/components/Loading";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "../ProtectedRoute";
+import { getUser } from "./api/user";
+import { useDispatch } from "react-redux";
+import { handleUser } from "./store/layout";
 
 function App() {
   const { isAuth } = useSelector((state) => state.layout);
+  const dispatch = useDispatch();
+  const fetchProfile = async () => {
+    try {
+      const resp = await getUser();
+      console.log(resp?.data);
+      dispatch(handleUser(resp?.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => { fetchProfile() }, []);
   return (
     <main className="App  relative">
       <Routes>

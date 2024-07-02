@@ -139,6 +139,9 @@ export const layoutSlice = createSlice({
       state.isMonochrome = action.payload;
       window.localStorage.setItem("monochrome", JSON.stringify(action.payload));
     },
+    handleUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
@@ -156,6 +159,7 @@ export const {
   handleFooterType,
   handleMobileMenu,
   handleMonoChrome,
+  handleUser
 } = layoutSlice.actions;
 
 export default layoutSlice.reducer;

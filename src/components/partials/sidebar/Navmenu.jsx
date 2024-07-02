@@ -33,7 +33,7 @@ const Navmenu = ({ menus }) => {
         }
       }
     });
-    document.title = `Dashcode  | ${locationName}`;
+    document.title = `Tumatar  | ${locationName}`;
 
     setActiveSubmenu(submenuIndex);
   }, [location]);
