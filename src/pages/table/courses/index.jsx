@@ -65,7 +65,7 @@ const courses = () => {
     } catch (error) {
       console.log(error);
     }
-  
+
   }
 
   useEffect(() => { fetchContent(); }, []);
@@ -90,12 +90,14 @@ const courses = () => {
                     <tr key={i}>
                       <td className="table-td">{i + 1}</td>
                       <td className="table-td">{row.content_title}</td>
-                      {row.content_transcript.length > 50
-                        ? row.content_transcript.substring(0, 50) + "..."
-                        : row.content_transcript}
+                      <td className="table-td">
+                        {row.content_transcript.length > 50
+                          ? row.content_transcript.substring(0, 50) + "..."
+                          : row.content_transcript}
+                      </td>
                       <td className="table-td ">{row.content_Link}</td>
                       <td className="table-td ">
-                        <button onClick={()=>navigate(`/chat/${row.content_id}`)} className="btn btn-dark mx-2">Chat</button>
+                        <button onClick={() => navigate(`/chat/${row.content_id}`)} className="btn btn-dark mx-2">Chat</button>
                         <button onClick={
                           () => deleteContentById(row.content_id)
                         } className="btn btn-danger">Delete</button>

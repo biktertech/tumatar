@@ -24,7 +24,12 @@ function App() {
   const fetchProfile = async () => {
     try {
       const resp = await getUser();
-      console.log(resp?.data);
+      // if status is 401, then logout the user
+      // if (resp?.response?.status === 401) {
+      //   localStorage.removeItem("token");
+      //   localStorage.removeItem("isAuth");
+      //   window.location.reload();
+      // }
       dispatch(handleUser(resp?.data));
     } catch (error) {
       console.error(error);
