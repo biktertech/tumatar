@@ -1,193 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Card from "@/components/ui/Card";
+import { tableData } from "@/constant/table-data";
+import { deleteContent, getContent } from "../../../api/content";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
+const columns = [
+  {
+    label: "#",
+    field: "id",
+  },
+  {
+    label: "Title",
+    field: "content_title",
+  },
+
+  {
+    label: "Transcript",
+    field: "content_transcript",
+  },
+  {
+    label: "Link",
+    field: "content_link",
+  },
+  {
+    label: "Action",
+    field: "action",
+  }
+];
+// slice(0, 10) is used to limit the number of rows to 10
+// const rows = tableData.slice(0, 7);
 const courses = () => {
-  // const columns = useMemo(() => COLUMNS, []);
-  // const data = useMemo(() => advancedTable, []);
-  // const tableInstance = useTable(
-  //   {
-  //     columns,
-  //     data,
-  //   },
+  const [rows, setRows] = useState([]);
 
-  //   useGlobalFilter,
-  //   useSortBy,
-  //   usePagination,
-  //   useRowSelect,
+  const navigate = useNavigate();
 
-  //   (hooks) => {
-  //     hooks.visibleColumns.push((columns) => [
-  //       {
-  //         id: "selection",
-  //         Header: ({ getToggleAllRowsSelectedProps }) => (
-  //           <div>
-  //             <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-  //           </div>
-  //         ),
-  //         Cell: ({ row }) => (
-  //           <div>
-  //             <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-  //           </div>
-  //         ),
-  //       },
-  //       ...columns,
-  //     ]);
-  //   }
-  // );
-  // const {
-  //   getTableProps,
-  //   getTableBodyProps,
-  //   headerGroups,
-  //   footerGroups,
-  //   page,
-  //   nextPage,
-  //   previousPage,
-  //   canNextPage,
-  //   canPreviousPage,
-  //   pageOptions,
-  //   state,
-  //   gotoPage,
-  //   pageCount,
-  //   setPageSize,
-  //   setGlobalFilter,
-  //   prepareRow,
-  // } = tableInstance;
+  const fetchContent = async () => {
+    try {
+      const resp = await getContent();
+      if (resp.status === 200) {
+        setRows(resp.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteContentById = async (id) => {
+    try {
+      const resp = await deleteContent(id);
+      if (resp.status === 200) {
+        toast.success("Content deleted successfully", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        fetchContent();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  useEffect(() => { fetchContent(); }, []);
   return (
-    <div>
-      <Card
-      >
-        <h1 className="text-2xl font-bold">Courses</h1>
-        {/* <div className="md:flex justify-between items-center mb-6">
-          <h4 className="card-title">Advanced Table</h4>
-          <div>
-            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-          </div>
-        </div>
+    <div className="grid xl:grid-cols-1 grid-cols-1 gap-5">
+      <Card title="Course List" noborder>
         <div className="overflow-x-auto -mx-6">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden ">
-              <table
-                className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
-                {...getTableProps}
-              >
+              <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                 <thead className=" border-t border-slate-100 dark:border-slate-800">
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
-                          scope="col"
-                          className=" table-th "
-                        >
-                          {column.render("Header")}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? " 🔽"
-                                : " 🔼"
-                              : ""}
-                          </span>
-                        </th>
-                      ))}
+                  <tr>
+                    {columns.map((column, i) => (
+                      <th key={i} scope="col" className=" table-th ">
+                        {column.label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
+                  {rows.map((row, i) => (
+                    <tr key={i}>
+                      <td className="table-td">{i + 1}</td>
+                      <td className="table-td">{row.content_title}</td>
+                      <td className="table-td">
+                        {row.content_transcript.length > 50
+                          ? row.content_transcript.substring(0, 50) + "..."
+                          : row.content_transcript}
+                      </td>
+                      <td className="table-td ">{row.content_Link}</td>
+                      <td className="table-td ">
+                        <button onClick={() => navigate(`/chat/${row.content_id}`)} className="btn btn-dark mx-2">Chat</button>
+                        <button onClick={
+                          () => deleteContentById(row.content_id)
+                        } className="btn btn-danger">Delete</button>
+                      </td>
                     </tr>
                   ))}
-                </thead>
-                <tbody
-                  className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
-                  {...getTableBodyProps}
-                >
-                  {page.map((row) => {
-                    prepareRow(row);
-                    return (
-                      <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
-                          return (
-                            <td {...cell.getCellProps()} className="table-td">
-                              {cell.render("Cell")}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <div className="md:flex md:space-y-0 space-y-5 justify-between mt-6 items-center">
-          <div className=" flex items-center space-x-3 rtl:space-x-reverse">
-            <span className=" flex space-x-2  rtl:space-x-reverse items-center">
-              <span className=" text-sm font-medium text-slate-600 dark:text-slate-300">
-                Go
-              </span>
-              <span>
-                <input
-                  type="number"
-                  className=" form-control py-2"
-                  defaultValue={pageIndex + 1}
-                  onChange={(e) => {
-                    const pageNumber = e.target.value
-                      ? Number(e.target.value) - 1
-                      : 0;
-                    gotoPage(pageNumber);
-                  }}
-                  style={{ width: "50px" }}
-                />
-              </span>
-            </span>
-            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-              Page{" "}
-              <span>
-                {pageIndex + 1} of {pageOptions.length}
-              </span>
-            </span>
-          </div>
-          <ul className="flex items-center  space-x-3  rtl:space-x-reverse">
-            <li className="text-xl leading-4 text-slate-900 dark:text-white rtl:rotate-180">
-              <button
-                className={` ${
-                  !canPreviousPage ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={() => previousPage()}
-                disabled={!canPreviousPage}
-              >
-                <Icon icon="heroicons-outline:chevron-left" />
-              </button>
-            </li>
-            {pageOptions.map((page, pageIdx) => (
-              <li key={pageIdx}>
-                <button
-                  href="#"
-                  aria-current="page"
-                  className={` ${
-                    pageIdx === pageIndex
-                      ? "bg-slate-900 dark:bg-slate-600  dark:text-slate-200 text-white font-medium "
-                      : "bg-slate-100 dark:bg-slate-700 dark:text-slate-400 text-slate-900  font-normal  "
-                  }    text-sm rounded leading-[16px] flex h-6 w-6 items-center justify-center transition-all duration-150`}
-                  onClick={() => gotoPage(pageIdx)}
-                >
-                  {page + 1}
-                </button>
-              </li>
-            ))}
-            <li className="text-xl leading-4 text-slate-900 dark:text-white rtl:rotate-180">
-              <button
-                className={` ${
-                  !canNextPage ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={() => nextPage()}
-                disabled={!canNextPage}
-              >
-                <Icon icon="heroicons-outline:chevron-right" />
-              </button>
-            </li>
-          </ul>
-        </div> */}
       </Card>
-
     </div>
   );
 };

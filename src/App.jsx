@@ -1,10 +1,11 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // home pages  & dashboard
 //import Dashboard from "./pages/dashboard";
 const Dashboard = lazy(() => import("./pages/dashboard"));
 const Courses = lazy(() => import("./pages/table/courses/index"));
+const CreateCourse= lazy(() => import("./pages/forms/CreateCourse"));
 const Login = lazy(() => import("./pages/auth/login"));
 const Register = lazy(() => import("./pages/auth/register"));
 const Chat = lazy(() => import("./pages/app/chat/index"));
@@ -13,9 +14,29 @@ import Layout from "./layout/Layout";
 import Loading from "@/components/Loading";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "../ProtectedRoute";
+import { getUser } from "./api/user";
+import { useDispatch } from "react-redux";
+import { handleUser } from "./store/layout";
 
 function App() {
   const { isAuth } = useSelector((state) => state.layout);
+  const dispatch = useDispatch();
+  const fetchProfile = async () => {
+    try {
+      const resp = await getUser();
+      // if status is 401, then logout the user
+      // if (resp?.response?.status === 401) {
+      //   localStorage.removeItem("token");
+      //   localStorage.removeItem("isAuth");
+      //   window.location.reload();
+      // }
+      dispatch(handleUser(resp?.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => { fetchProfile() }, []);
   return (
     <main className="App  relative">
       <Routes>
@@ -65,7 +86,27 @@ function App() {
         </Route>
         <Route path="/*" element={<Layout />}>
           <Route
-            path="chat"
+            path="course/list"
+            element={
+              <ProtectedRoute>
+                <Courses />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
+            path="create/course"
+            element={
+              <ProtectedRoute>
+                <CreateCourse />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="/*" element={<Layout />}>
+          <Route
+            path="chat/:id"
             element={
               <ProtectedRoute>
                 <Chat />
@@ -73,6 +114,7 @@ function App() {
             }
           />
         </Route>
+
         
       </Routes>
     </main>

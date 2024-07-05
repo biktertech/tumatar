@@ -42,7 +42,7 @@ const login = () => {
                 <div className="mobile-logo text-center mb-6 lg:hidden block">
                   <Link to="/">
                     <img
-                      src={isDark ? LogoWhite : Logo}
+                      src={isDark ? TLogo : TLogo}
                       alt=""
                       className="mx-auto"
                     />

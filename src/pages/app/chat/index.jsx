@@ -10,31 +10,68 @@ import Chat from "./Chat";
 import Blank from "./Blank";
 import Info from "./Info";
 
-import { toggleMobileChatSidebar, setContactSearch } from "./store";
+import { toggleMobileChatSidebar, setContactSearch, setConversation } from "./store";
+import { getConversations, getMessages } from "../../../api/conversation.js";
+import { useParams } from "react-router-dom";
 const ChatPage = () => {
   const { width, breakpoints } = useWidth();
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { activechat, openinfo, mobileChatSidebar, contacts, searchContact } =
+  const { activechat, openinfo, mobileChatSidebar, contacts, searchContact, conversation } =
     useSelector((state) => state.chat);
+
+  // const [conversation, setConversation] = React.useState([]);
 
   const searchContacts = contacts?.filter((item) =>
     item.fullName.toLowerCase().includes(searchContact.toLowerCase())
   );
 
+  const fetchConversations = async (id) => {
+    try {
+      const conversations = await getConversations(id);
+      const conversationData = conversations?.data || [];
+
+      // Fetch messages and set titles for each conversation
+      const updatedConversations = await Promise.all(
+        conversationData.map(async (conversation) => {
+          const messages = await getMessages(id,conversation.conversation_id);
+          const firstMessage = messages?.data?.messages[0]?.content || { content: "No messages yet" };
+
+          return {
+            ...conversation,
+            ...messages?.data,
+            title: firstMessage,
+          };
+        })
+      );
+
+      // setConversation(updatedConversations);
+      dispatch(setConversation(updatedConversations));
+
+    } catch (error) {
+      console.error("Error fetching conversations or messages:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (id) {
+      fetchConversations(id);
+    }
+  }, [id]);
+
   return (
     <div className="flex lg:space-x-5 chat-height overflow-hidden relative rtl:space-x-reverse">
       <div
         className={`transition-all duration-150 flex-none min-w-[260px] 
-        ${
-          width < breakpoints.lg
+        ${width < breakpoints.lg
             ? "absolute h-full top-0 md:w-[260px] w-[200px] z-[999]"
             : "flex-none min-w-[260px]"
-        }
-        ${
-          width < breakpoints.lg && mobileChatSidebar
+          }
+        ${width < breakpoints.lg && mobileChatSidebar
             ? "left-0 "
             : "-left-full "
-        }
+          }
         `}
       >
         <Card
@@ -56,12 +93,15 @@ const ChatPage = () => {
               /> */}
               <h3 className="text-lg font-semibold text-gray-400 dark:text-slate-100">
                 Recent Chats
-                </h3>
+              </h3>
             </div>
           </div>
           <SimpleBar className="contact-height">
-            {searchContacts?.map((contact, i) => (
-              <Contacts key={i} contact={contact} />
+            {/* {conversation?.map((contact, i) => (
+              <Contacts key={i} contact={contact} index={i} />
+            ))} */}
+            {conversation.slice().reverse().map((contact, i) => (
+              <Contacts key={i} contact={contact} index={conversation.length - 1 - i} />
             ))}
           </SimpleBar>
         </Card>

@@ -1,26 +1,21 @@
-export const menuItems = [
+export let menuItems = [
   {
     isHeadr: true,
     title: "menu",
   },
-
+  {
+    title:"Courses List",
+    icon:"heroicons-outline:academic-cap",
+    link:"course/list"
+  },
   {
     title: "Courses",
     icon: "heroicons-outline:academic-cap",
     isOpen: true,
     isHide: true,
-    child: [
-      {
-        childtitle: "Chat",
-        childlink: "chat",
-      },
-    ],
+    child: [],
   },
-  // {
-  //   title:"Courses",
-  //   icon:"heroicons-outline:academic-cap",
-  //   link:"courses"
-  // },
+  
   // {
   //   title:"Chat",
   //   icon:"heroicons-outline:chat-alt",
